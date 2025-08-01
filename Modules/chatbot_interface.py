@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 
 # Load the CSV file containing resource data
-df = pd.read_csv("student_resources_index.csv")
+df = pd.read_csv("../Data/student_resources_index.csv")
 
 # Set the page title
 st.title("🎓 Student Resources Chatbot")
