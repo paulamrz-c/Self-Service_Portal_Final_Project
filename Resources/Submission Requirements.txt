@@ -1,0 +1,40 @@
+Group Name
+FInal Project 7
+Instructions
+Submission Requirements:
+
+Each team must submit links to the following:
+
+HTML Report: Publish a project report on GitHub Pages.
+Jupyter Notebook: Include all code and relevant outputs on GitHub.
+Optional Links: You may include additional resources, such as a Streamlit app, if applicable.
+Dry Runs:
+Each team will prepare two dry runs (i.e., presentations and demos) of their project. They will take place during weeks 13 and 14 of the term. Each one will last 5 minutes. The expectation is to witness a partially complete, but running,  application along with an architecture diagram of the entire application (not just the predictive component) to explain how the solution is being developed. Don't do a code walkthrough (there will be no time for it). Instead, share the link to your GitHub repo with the latest codebase in the main branch.
+
+Presentation:
+During the final week of the term, each team will present its project to the class. Presentations can be based on your HTML report or a slide deck.
+
+Duration: 10 minutes for the presentation, followed by 10+ minutes for audience questions.
+Deliverables: PowerPoint slide deck with architecture diagram and link to  GitHub repository containing the final version of the code in the main branch.
+Projects:
+This term, we have two exciting projects for you to work on. You will work in teams of 2-3. The teams will be assigned by the instructor, with your input. The two projects are:
+
+AI-Enhanced Self-Service Portal for Student Affairs: A Proof of Concept: 
+Student Success Advisors (SSAs) are currently overwhelmed by low-complexity, high-volume inquiries. A reduction in SSA staffing highlights the urgent need for a scalable solution. This project proposes the design and implementation of a chatbot-based self-service tool to handle frequently asked questions (FAQs), integrated with a fallback mechanism ("off-ramp") to escalate complex queries to human advisors.
+Sustainable AI - Transparency and Energy-Efficient Prompt/Context Engineering with Machine Learning: 
+AI models are becoming increasingly resource-intensive. The EU will require energy usage reporting by August 2026. This project addresses transparency in energy usage and dynamic workload optimization in data centers. The rapid expansion of AI data centers—1,240 built in 2025—threatens global sustainability, with rising electricity demand, $9.2B in health-related costs, and severe water use in arid regions. Utilities face infrastructure strain, while states like California enforce regulations to curb environmental impact through zero-carbon tariffs and AI-specific energy reporting requirements.
+You can find in-depth project protocols in the attachments section below.
+
+NOTE: The implementation will include many other aspects of both Software Engineering, Data Science, and Machine Learning. You are expected to produce a running and functional Proof of Concept application. However, your focus should be on developing, testing, and integrating a predictive capability for the project. The exact nature and algorithms will become a design decision for you and your team, and you will be expected to explain your logic clearly and with technical depth as depicted in the grading criteria below. Your instructor will assist you throughout the process.
+
+You will be asked to present the results of your final project. The exposition should be accessible to your peers, introducing the topic clearly and showcasing your findings effectively.
+
+Grading Criteria:
+Your project will be evaluated based on the following components:
+
+Code Quality (12 points): Technical depth and breadth of the implementation.
+Explanations (12 points): Clarity, depth, and use of graphs to support statements.
+Presentation (6 points): Clarity, organization, and delivery during the in-class presentation.
+Dry Run #1 (1 point)
+Dry Run #2 (1 point)
+Final Presentation (4 points)
