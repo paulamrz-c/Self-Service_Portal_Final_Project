@@ -1,26 +1,59 @@
 import streamlit as st
-from retriever import answer
+import requests
 
+API_URL = "http://localhost:8000/predict"
 
-# Set the page title
+# Set page title
 st.set_page_config(page_title="Student FAQ Chatbot", layout="centered")
-st.title("🎓 Ask the Student Affairs Chatbot")
 
-# Display a short instruction
-st.write("Ask a question and I’ll suggest relevant student support resources.")
+# Start History
+if "messages" not in st.session_state:
+    st.session_state.messages = []
 
+# Title and instructions
+st.title("🎓 AI Student Support Chatbot 🤖")
+st.caption("Ask me anything. I’ll try to find the most relevant FAQ or student resource.")
 st.markdown("""
 Type your question below. The chatbot will find the most relevant FAQ or student resource using vector similarity.
 """)
 
-query = st.text_input("💬 Your question:")
+# Showing History
+for sender, message in st.session_state.messages:
+    if sender == "user":
+        st.markdown(f"""
+        <div style="text-align: right; margin-bottom: 10px;">
+            <span style="background-color: #9BE7A9; padding: 10px 15px; border-radius: 12px; display: inline-block; max-width: 70%;">
+                {message}
+            </span>
+        </div>
+        """, unsafe_allow_html=True)
+    else:
+        st.markdown(f"""
+        <div style="text-align: left; margin-bottom: 10px;">
+            <span style="background-color: #93c47d; padding: 10px 15px; border-radius: 12px; display: inline-block; max-width: 70%;">
+                {message}
+            </span>
+        </div>
+        """, unsafe_allow_html=True)
 
-model_type = st.radio("Choose embedding model:", ["w2v", "glove"], horizontal=True)
+# User input
+query = st.text_input("💬 Type your message:", key="chat_input")
 
-if st.button("Get Answer") and query:
-    with st.spinner("Searching for the best answer..."):
-        response = answer(query, model_type=model_type)
-    st.success("✅ Result:")
-    st.markdown(response)
+# On button click
+if st.button("Send") and query.strip():
+    st.session_state.messages.append(("user", query))
 
+    try:
+        with st.spinner("Thinking..."):
+            res = requests.post(API_URL, json={"question": query})
+            if res.status_code == 200:
+                out = res.json()
+                reply = f"{out['answer']} )"
+            else:
+                reply = "❌ API error. Please try again."
+    except:
+        reply = "🚫 Unable to reach the backend."
+
+    st.session_state.messages.append(("bot", reply))
+    st.rerun()
 

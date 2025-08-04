@@ -18,7 +18,6 @@ import numpy as np
 import spacy
 import ftfy, unicodedata, re
 from sklearn.metrics.pairwise import cosine_similarity
-import pickle
 
 ### =======================
 ### Load NLP model (spaCy)
