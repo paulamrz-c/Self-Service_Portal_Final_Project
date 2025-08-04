@@ -7,13 +7,14 @@ app = FastAPI()
 
 class Query(BaseModel):
     question: str
-    model: str = "w2v"
+    model: str = "hf"
 
 @app.post("/predict")
+
 def predict(q: Query):
-    result = answer(q.question, model_type=q.model)
-    if "(Similarity:" in result:
-        score = float(result.split("Similarity: ")[-1].replace(")", ""))
-    else:
-        score = 1.0
-    return {"answer": result, "similarity": round(score, 2)}
+    text, category, similarity = answer(q.question, model_type=q.model)
+    return {
+        "answer": text,
+        "category": category,
+        "similarity": round(float(similarity), 2) if similarity is not None else None
+    }
