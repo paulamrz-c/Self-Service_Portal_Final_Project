@@ -25,9 +25,9 @@ hola
 
 """
 
-print(answer("How can I pay my fees?", model_type="w2v"))
-print(answer("How can I pay my fees?", model_type="glove"))
-print(answer("How can I pay my fees?", model_type="hf"))
+# print(answer("How can I pay my fees?", model_type="w2v"))
+# print(answer("How can I pay my fees?", model_type="glove"))
+# print(answer("How can I pay my fees?", model_type="hf"))
 
 print("*********")
 
@@ -35,13 +35,13 @@ print(answer("What is VMock?", model_type="w2v"))
 print(answer("What is VMock?", model_type="glove"))
 print(answer("What is VMock?", model_type="hf"))
 
-print("*********")
+# print("*********")
 
-print(answer("Where can I fix my CV?", model_type="w2v"))
-print(answer("Where can I fix my CV?", model_type="glove"))
-print(answer("Where can I fix my CV?", model_type="hf"))
-print("*********")
+# print(answer("Where can I fix my CV?", model_type="w2v"))
+# print(answer("Where can I fix my CV?", model_type="glove"))
+# print(answer("Where can I fix my CV?", model_type="hf"))
+# print("*********")
 
-print(answer("Where do I submit my ONE Card photo?", model_type="w2v"))
-print(answer("Where do I submit my ONE Card photo?", model_type="glove"))
-print(answer("Where do I submit my ONE Card photo?", model_type="hf"))
+# print(answer("Where do I submit my ONE Card photo?", model_type="w2v"))
+# print(answer("Where do I submit my ONE Card photo?", model_type="glove"))
+# print(answer("Where do I submit my ONE Card photo?", model_type="hf"))

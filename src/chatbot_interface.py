@@ -6,6 +6,7 @@ API_URL = "http://localhost:8000/predict"
 # Set page title
 st.set_page_config(page_title="Student FAQ Chatbot", layout="centered")
 
+
 # Start History
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -22,7 +23,7 @@ for sender, message in st.session_state.messages:
     if sender == "user":
         st.markdown(f"""
         <div style="text-align: right; margin-bottom: 10px;">
-            <span style="background-color: #9BE7A9; padding: 10px 15px; border-radius: 12px; display: inline-block; max-width: 70%;">
+            <span style="background-color: #DDC7EF; color: ##3E1A5B; padding: 10px 15px; border-radius: 13px; display: inline-block; max-width: 80%;">
                 {message}
             </span>
         </div>
@@ -30,7 +31,7 @@ for sender, message in st.session_state.messages:
     else:
         st.markdown(f"""
         <div style="text-align: left; margin-bottom: 10px;">
-            <span style="background-color: #93c47d; padding: 10px 15px; border-radius: 12px; display: inline-block; max-width: 70%;">
+            <span style="background-color: #B280DB; color: ##3E1A5B; padding: 10px 15px; border-radius: 13px; display: inline-block; max-width: 80%;">
                 {message}
             </span>
         </div>

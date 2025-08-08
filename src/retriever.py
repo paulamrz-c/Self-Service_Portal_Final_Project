@@ -30,9 +30,10 @@ import os
 from transformers import pipeline
 sys.path.append(os.path.dirname(__file__))
 from query_classifier import classify_query
-
-
 from embedding_hf import encode_texts
+
+
+
 ### =======================
 ### Load NLP model (spaCy)
 ### =======================
@@ -108,9 +109,9 @@ def generate_llm_response(query):
         "Keep your answers short and friendly.\n"
         f"Student: {query}\nAdvisor:"
     )
-    response = generator(prompt, max_length=60, num_return_sequences=1, do_sample=True, temperature=0.8)[0]["generated_text"]
+    response = generator(prompt, max_new_tokens=60, num_return_sequences=1, do_sample=True, temperature=0.8, truncation=True)[0]["generated_text"]
     
-    # Extraer solo lo generado después de "Advisor:"
+    
     if "Advisor:" in response:
         return response.split("Advisor:")[-1].strip().split("\n")[0]
     else:
@@ -126,23 +127,7 @@ def answer(query: str, model_type="hf", top_k=1) -> tuple[str, str, float | None
     from the corpus using either Word2Vec, GloVe or Hugging Face embeddings.
     """
     category = classify_query(query)
-    print(f"🧠 CLASSIFIED AS: {category} for: {query}")    
-
-    if category == "chitchat":
-        # ✅ Generar con LLM solo si es chitchat
-        llm_response = generate_llm_response(query)
-        return (
-            f"{llm_response}\n\n_(Generated using LLM for chitchat)_",
-            category,
-            None,
-        )
-    
-    if category == "offramp":
-        return (
-            "🤖 This question may require human support. We've flagged it for a student advisor.",
-            category,
-            None,
-        )
+    print(f"****** CLASSIFIED AS: {category} for: {query}")    
 
     if model_type == "glove":
         from gensim.models import KeyedVectors
@@ -174,6 +159,28 @@ def answer(query: str, model_type="hf", top_k=1) -> tuple[str, str, float | None
     best_sim = sims[best_idx]
     best_doc = docs.iloc[best_idx]
 
+    if category == "chitchat":
+        # only if it is chitchat
+        if best_sim > 0.8:
+            return (
+                f"{best_doc['payload']}  \n\n[Generated using: {best_doc['source']}]  \n(Similarity: {best_sim:.2f})",
+                best_doc["source"],
+                best_sim
+            )
+        else:
+            llm_response = generate_llm_response(query)
+            return (
+                f"{llm_response}\n\n_(Generated using LLM for chitchat)_",
+                category,
+                None,
+            )
+    
+    if category == "offramp":
+        return (
+            "🤖 This question may require human support. We've flagged it for a student advisor.",
+            category,
+            None,
+        )
 
     # Optional off-ramp (if similarity is too low)
     if best_sim < 0.4:

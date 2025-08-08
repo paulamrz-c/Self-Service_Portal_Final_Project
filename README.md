@@ -1,99 +1,98 @@
 # Student Self-Service Chatbot: Proof of Concept
 
-This repository contains a Proof of Concept (PoC) for a chatbot that answers frequently asked questions and connects students with resources using NLP and semantic similarity.
+This repository presents a **Proof of Concept (PoC)** for a chatbot designed to reduce the workload of Student Success Advisors by answering frequent student queries using **NLP**, **semantic search**, and **predictive classification**.
 
 ## Project Structure
 
 Self-Service_Portal_Final_Project/
-├── data/
-│   ├── raw/                        # Original PDFs and scraped CSV
-│   └── processed/                 # Cleaned FAQs, resources, and embeddings
-├── models/
-│   └── embeddings/                # Trained Word2Vec model + downloaded GloVe
-├── notebooks/
-│   └── 01_scrapping.ipynb         # Scrapping Success Page
-│   └── 02_extract_FAQs.ipynb      # Extraction of FAQs from PDFs
-│   └── 03_build_embeddings.ipynb  # Preprocessing and vector training
-├── src/
-│   ├── retriever.py               # Core logic to return relevant answers
-│   └── chatbot_interface.py       # Streamlit chatbot interface
-│   └── test.py                    # Local test of chatbot (optional)
-└── README.md                      # You're here!
+
+├── data/ # Raw & processed FAQs/resources & embeddings
+
+├── models/ # Trained classifier, Word2Vec, GloVe
+
+├── notebooks/ # Jupyter notebooks for data processing
+
+├── src/ # All source code
+
+│ ├── api.py # FastAPI app for predictions
+
+│ ├── chatbot_interface.py # Streamlit frontend
+
+│ ├── retriever.py # Core logic (semantic search + classifier)
+
+│ ├── query_classifier.py # PyTorch classifier
+
+│ └── embedding_hf.py # SentenceTransformer embeddings
+
+├── requirements.txt # Python dependencies
+
+└── README.md # This file
 
 ## NLP Pipeline
 
-We used a lightweight but effective NLP pipeline:
-
-- ftfy, unicodedata, re: fix encoding and normalize text
-- spaCy: tokenization + lemmatization
-- stopword removal: remove unhelpful filler words
-- We applied this pipeline both to our corpus (FAQs + resources) and to incoming user questions.
+-  Text normalization: `ftfy`, `unicodedata`, `re`
+-  Lemmatization & tokenization: `spaCy`
+-  Vectorization: Word2Vec, GloVe, and HuggingFace Sentence Transformers
+-  Query classification: `faq`, `resource`, `chitchat`, `offramp` (using PyTorch model)
 
 ## Corpus Construction
 
-- FAQs were extracted from Winter 2024 Student Fees and Registrar PDF documents.
-- Resources were scraped from the Conestoga Student Success Portal and cleaned.
-- Both were merged into a unified corpus and vectorized.
+- Extracted FAQs from Winter 2024 PDF documents
+- Scraped resources from Conestoga's [Student Success Portal](https://successportal.conestogac.on.ca/)
+- Combined into a unified document base with associated embeddings
 
-## Each entry includes:
 
-text: question/title + answer/description
-source: faq or resource
-payload: final answer or link shown to the user
+##  Retrieval Logic (Retriever)
 
-### Embeddings
+Implemented in `src/retriever.py`:
+- Classify the query
+- If similarity > 0.9 (even for `chitchat`), override and return the matched answer
+- Otherwise, fall back to a generative model (`distilgpt2`) or escalate to human advisor
 
-Two types of embeddings were used:
 
-🔹 Word2Vec (custom) --> Trained on our actual student data (FAQs + resources)
+##  Demo Features
+Ask natural language questions like:
+"Where can I upload my ONE Card photo?"
+"Where can I find my timetable?"
+"What is VMock?"
+"How can I pay my fees"
 
-Captures relationships specific to Conestoga context
+### Answers are returned with:
+💬 Relevant info (answer or link)
+📄 Source (FAQ or resource)
+📈 Similarity score
+🔁 Escalation fallback via LLM (if needed)
 
-🔹 GloVe (pre-trained) --> 100-dimensional GloVe.6B vectors from Stanford NLP
+## Models Used
+- Word2Vec: Trained on internal FAQs + resources
+- GloVe: Pre-trained 100d vectors from Stanford NLP
+- HuggingFace: all-MiniLM-L6-v2 for contextual sentence embeddings
+- DistilGPT2: Used as LLM fallback for chitchat and low similarity
 
-Brings external general knowledge
+## To Do
+- Override chitchat if semantic similarity is very high
+- Feedback loop: Let users flag incorrect answers
+- Deploy to Streamlit Cloud / Render
 
-### Vectors were saved in:
+## Authors
+- Paula Ramirez (8963215)
+- Babandeep (9001552)
+- Hasyashri Bhatt (9028501)
 
-data/processed/glove_vectors.pkl
 
-data/processed/word2vec_vectors.pkl
+##  **How to Run the Application**
 
-## Retriever Logic
+### 1. Activate your virtual environment (PowerShell):
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
+.\venv\Scripts\activate
+```
+### 2. Run the FastAPI backend:
+```powershell
+streamlit run src/chatbot_interface.py --server.port 8501
+```
+### 3. Launch the Streamlit chatbot interface:
+```powershell
+streamlit run src/chatbot_interface.py --server.port 8501
+```
 
-Implemented in retriever.py:
-
-- Preprocess the user query
-- Vectorize it using the selected model
-- Compare it with all document vectors using cosine similarity
-- Return the most similar answer (payload) if similarity > 0.4
-
-If not, return fallback message to escalate
-
-## Streamlit Interface
-
-A simple app in src/app.py lets you test the chatbot:
-
-- streamlit run src/app.py
-
-### Features:
-
-- Input field for question
-- Option to select embedding model (Word2Vec or GloVe)
-- Returns matched response and its source
-
-## Next Steps
-
-Fine-tune similarity threshold
-Add UI elements for feedback or human escalation
-Deploy on public link (Streamlit Cloud, Render, etc.)
-
-👥 Authors
-
-- Babandeep 9001552
-- Hasyashri Bhatt 9028501
-- Paula Ramirez 8963215
-
-📄 License
-
-This is a student PoC project. Not intended for production use without privacy and data compliance review.
